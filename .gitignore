@@ -1,0 +1,31 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+
+# 虚拟环境
+venv/
+env/
+.venv/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+.DS_Store
+
+# Streamlit
+.streamlit/secrets.toml
+
+# 测试数据（如果有本地测试用的 CSV，不想公开就加进来）
+test_data/
+*.csv
+*.xlsx
+*.xrdml
+
+# 但保留 config 目录下的 yaml
+!config/*.yaml

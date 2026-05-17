@@ -1,0 +1,54 @@
+# PTT/PBT 共混体系配置文件
+# 实测峰位后期填入，程序读取后用于"峰位提示"（不做自动归属，仅供人工核验参考）
+
+# === 全局默认参数 ===
+fitting_defaults:
+  two_theta_min: 10.0          # 拟合范围下限
+  two_theta_max: 35.0          # 拟合范围上限
+  peak_shape: "PseudoVoigt"    # 默认峰型：PseudoVoigt / Gaussian / Lorentzian / Voigt
+  prominence: 0.02             # 自动寻峰灵敏度（相对最大强度）
+  min_peak_distance: 0.3       # 最小峰间距（度）
+
+# === 结晶峰参数边界 ===
+crystalline_peak:
+  fwhm_min: 0.1
+  fwhm_max: 1.5
+  center_tolerance: 0.5        # 批量模式下，峰中心允许的拟合微调范围 (±度)
+
+# === 无定形峰参数（PTT/PBT 共混：1 个无定形峰）===
+amorphous_peak:
+  count: 1
+  center_default: 21.0
+  center_min: 18.0
+  center_max: 24.0
+  fwhm_min: 1.5
+  fwhm_max: 15.0
+
+# === PTT 实测峰位（后期填入，单位：度 2θ）===
+# 格式：每个峰一行，包含 center / hkl / intensity / note
+# hkl 可写 "unknown"，intensity 可写 "strong"/"medium"/"weak"
+PTT_peaks:
+  # 示例（待你用实测数据替换）：
+  # - {center: 15.5, hkl: "(010)", intensity: "medium", note: ""}
+  # - {center: 17.0, hkl: "(012)", intensity: "strong", note: ""}
+  # - {center: 19.5, hkl: "(102)", intensity: "medium", note: ""}
+  # - {center: 21.5, hkl: "(-112)", intensity: "medium", note: ""}
+  # - {center: 23.5, hkl: "(104)", intensity: "strong", note: ""}
+  # - {center: 24.7, hkl: "(-104)", intensity: "weak", note: ""}
+  []
+
+# === PBT 实测峰位（后期填入）===
+PBT_peaks:
+  # 示例：
+  # - {center: 16.0, hkl: "(010)", intensity: "medium", note: ""}
+  # - {center: 17.2, hkl: "(011)", intensity: "strong", note: ""}
+  # - {center: 20.5, hkl: "(-101)", intensity: "medium", note: ""}
+  # - {center: 23.2, hkl: "(100)", intensity: "strong", note: ""}
+  # - {center: 25.0, hkl: "(111)", intensity: "medium", note: ""}
+  []
+
+# === 峰位匹配容差（用于"峰归属提示"）===
+# 当自动检测到的峰中心与上述 PTT/PBT 列表中某峰的差值 < tolerance 时，提示可能归属
+peak_assignment_hint:
+  tolerance: 0.3               # 度
+  enabled: true                # 是否启用提示（仅提示，不影响拟合）
