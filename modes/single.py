@@ -135,16 +135,28 @@ def render():
     st.subheader("2️⃣ 拟合设置")
     col1, col2, col3 = st.columns(3)
     with col1:
+        # 数据实际范围
+        data_tt_min = float(meta["two_theta_min"])
+        data_tt_max = float(meta["two_theta_max"])
+
+        # 配置中的期望默认值，钳制到数据实际区间内
+        cfg_tt_min = float(fit_defaults.get("two_theta_min", 10.0))
+        cfg_tt_max = float(fit_defaults.get("two_theta_max", 35.0))
+        default_tt_min = min(max(cfg_tt_min, data_tt_min), data_tt_max)
+        default_tt_max = min(max(cfg_tt_max, data_tt_min), data_tt_max)
+        # 保证上限严格大于下限，避免 number_input 初始就违反 tt_max > tt_min
+        if default_tt_max <= default_tt_min:
+            default_tt_max = data_tt_max
+
         tt_min = st.number_input("2θ 下限 (°)",
-                                  value=float(fit_defaults.get("two_theta_min", 10.0)),
-                                  min_value=float(meta["two_theta_min"]),
-                                  max_value=float(meta["two_theta_max"]),
+                                  value=default_tt_min,
+                                  min_value=data_tt_min,
+                                  max_value=data_tt_max,
                                   step=0.5)
         tt_max = st.number_input("2θ 上限 (°)",
-                                  value=float(min(fit_defaults.get("two_theta_max", 35.0),
-                                                    meta["two_theta_max"])),
-                                  min_value=float(meta["two_theta_min"]),
-                                  max_value=float(meta["two_theta_max"]),
+                                  value=default_tt_max,
+                                  min_value=data_tt_min,
+                                  max_value=data_tt_max,
                                   step=0.5)
     with col2:
         peak_shape = st.selectbox("峰型",
