@@ -139,14 +139,29 @@ def render():
         data_tt_min = float(meta["two_theta_min"])
         data_tt_max = float(meta["two_theta_max"])
 
-        # 配置中的期望默认值，钳制到数据实际区间内
+        # 配置中的期望默认值
         cfg_tt_min = float(fit_defaults.get("two_theta_min", 10.0))
         cfg_tt_max = float(fit_defaults.get("two_theta_max", 35.0))
+
+        # 钳制到数据范围内
         default_tt_min = min(max(cfg_tt_min, data_tt_min), data_tt_max)
         default_tt_max = min(max(cfg_tt_max, data_tt_min), data_tt_max)
-        # 保证上限严格大于下限，避免 number_input 初始就违反 tt_max > tt_min
         if default_tt_max <= default_tt_min:
             default_tt_max = data_tt_max
+            default_tt_min = data_tt_min
+
+        # === DEBUG ===
+        st.info(
+            f"DEBUG: data=[{data_tt_min}, {data_tt_max}], "
+            f"cfg=[{cfg_tt_min}, {cfg_tt_max}], "
+            f"default=[{default_tt_min}, {default_tt_max}]"
+        )
+
+        # 再做一次终极防御性钳制（防浮点误差）
+        default_tt_min = max(default_tt_min, data_tt_min)
+        default_tt_min = min(default_tt_min, data_tt_max)
+        default_tt_max = max(default_tt_max, data_tt_min)
+        default_tt_max = min(default_tt_max, data_tt_max)
 
         tt_min = st.number_input("2θ 下限 (°)",
                                   value=default_tt_min,
