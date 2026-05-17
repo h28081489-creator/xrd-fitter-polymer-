@@ -174,8 +174,8 @@ def _stem(filename: str) -> str:
 def render():
     _init_state()
     st.header("📚 批量分析模式")
-    st.caption("策略：所有样品使用统一峰表（"主峰表"），每个样品独立拟合，"
-                "峰中心允许 ±tolerance 微调。")
+    st.caption('策略：所有样品使用统一峰表（"主峰表"），每个样品独立拟合，'
+           '...后面的内容...')
 
     cfg = load_materials_config("config/materials.yaml")
     fit_defaults = cfg.get("fitting_defaults", {})
