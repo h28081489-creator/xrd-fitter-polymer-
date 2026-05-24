@@ -35,8 +35,9 @@
 ## 安装
 
 ```bash
-git clone <your-repo-url>
-cd xrd_web
+git clone https://github.com/h28081489-creator/xrd-fitter-polymer-.git
+cd xrd-fitter-polymer-
 python -m venv venv
 source venv/bin/activate    # Windows: venv\Scripts\activate
 pip install -r requirements.txt
+```
